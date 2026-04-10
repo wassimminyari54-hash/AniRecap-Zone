@@ -1,0 +1,487 @@
+/* --- 1. الإعدادات العامة --- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0; 
+    background-color: #121212; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* --- 1. صفحة التحميل (Loading Screen) --- */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; /* أعلى من كلشي، حتى المودال */
+    transition: opacity 0.8s ease, visibility 0.8s ease; /* أنيمايشن الاختفاء */
+}
+
+/* فاش يختفي الكلاس بالجافا سكريبت */
+#loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-content h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    animation: flicker 2s infinite; /* أنيمايشن "الشعيل والطفية" */
+}
+
+/* تمييز كلمة Zone باللون الأزرق */
+.loading-content .neon-text {
+    color: #00f2ff;
+    text-shadow: 0 0 15px #00f2ff, 0 0 30px rgba(0, 242, 255, 0.7);
+}
+
+.flicker-line {
+    width: 150px;
+    height: 3px;
+    background-color: #ff4757; /* لون أحمر */
+    margin: 15px auto;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #ff4757;
+    animation: flickerLine 1.5s infinite;
+}
+
+.loading-content p {
+    color: #555;
+    font-size: 0.9rem;
+    margin: 10px 0 0 0;
+    font-style: italic;
+}
+
+/* --- أنيمايشن "الطفية والشعيل" (Flicker) --- */
+@keyframes flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #00f2ff;
+    }
+    20%, 24%, 55% {
+        opacity: 0.5;
+        text-shadow: none;
+    }
+}
+
+@keyframes flickerLine {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 10px #ff4757, 0 0 20px rgba(255, 71, 87, 0.7);
+    }
+    20%, 24%, 55% {
+        opacity: 0.3;
+        box-shadow: none;
+    }
+}
+
+/* تنسيق الهيدر باش يجي العنوان وتحتو البحث */
+.head {
+    background-color: #000;
+    padding: 20px;
+    border-bottom: 2px solid #00f2ff;
+    box-shadow: 0 4px 20px rgba(0, 242, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column; /* هادي هي اللي كتجيب البحث تحت العنوان */
+    align-items: center;
+    gap: 15px; /* مسافة بين العنوان والبحث */
+}
+
+/* ستايل خانة البحث الجديد */
+.search-container {
+    position: relative;
+    width: 300px; /* عرض مناسب */
+}
+
+#no-results {
+    width: 100%;
+    margin-top: 50px;
+    animation: fadeIn 0.5s ease;
+}
+
+#no-results h3 {
+    color: #ff4757; /* لون أحمر نيون خفيف */
+    text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+#no-results p {
+    color: #555;
+    font-size: 1rem;
+}  
+
+#searchInput {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(0, 242, 255, 0.5);
+    border-radius: 30px; /* شكل بيضاوي أنيق */
+    padding: 10px 20px 10px 40px; /* مسافة للأيقونة */
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+/* تأثير فاش يبرك المستخدم على البحث */
+#searchInput:focus {
+    border-color: #00f2ff;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.6);
+    background: rgba(255, 255, 255, 0.1);
+    width: 350px; /* كيتوسع شوية فاش كيتكليكا عليه */
+}
+
+/* أيقونة البحث */
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* تحسين شكل الـ Placeholder */
+#searchInput::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+}
+
+h1 { 
+    margin: 0; 
+    font-size: 1.8rem; 
+    color: #00f2ff;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+}
+
+h2#anim {
+    margin: 0; 
+    font-size: 1.8rem; 
+    color: #00f2ff;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+}
+
+/* --- 2. الحاوية وبطاقات الأنمي --- */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    gap: 25px; 
+    padding: 30px;
+    width: 100%;
+    max-width: 1400px; /* باش ما يتشتتوش بزاف ف الشاشات الكبيرة */
+    margin: 0 auto;
+}
+
+/* هاد الكلاس هو اللي كيحيد الأنميات اللي ما مطابقاش البحث */
+.anim.hidden {
+    display: none !important;
+}
+
+/* --- تعديل كلاس الكارطة الموحد --- */
+.anim {
+    background: #1e1e1e;
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    padding: 10px;
+    border-radius: 15px;
+    width: 200px; /* عرض ثابت وموحد */
+    height: 380px; /* ارتفاع ثابت باش السطر يجي مستوي */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+/* الحالة فاش كيتزاد الكلاس بالجافا سكريبت */
+.anim.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.anim:hover {
+    transform: translateY(-10px); 
+    box-shadow: 0 10px 25px rgba(0, 242, 255, 0.3);
+    border-color: #00f2ff;
+}
+
+.name h3 {
+    text-align: center;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.image img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover; 
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.anim.naruto:hover { box-shadow: 0 0 25px #ff9800; border-color: #ff9800; }
+.anim.demon:hover { box-shadow: 0 0 25px #ff4757; border-color: #ff4757; }
+.anim.never:hover { box-shadow: 0 0 25px gold; border-color:gold; }
+.anim.hunter:hover { box-shadow: 0 0 25px #5602c4; border-color: #5602c4; }
+.anim.jujutsu:hover { box-shadow: 0 0 25px #5602c4; border-color: #5602c4; }
+.anim.dragon:hover { box-shadow: 0 0 25px #2c02c4; border-color: #2c02c4; }
+/* --- 3. نافذة الفيديو (Modal) --- */
+.modal {
+    display: none; /* هادي ضرورية باش المودال يبقا مخفي حتى تبرك على شي أنمي */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.95);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    position: absolute; /* رجعناها absolute لضمان استقرار اللمس */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 850px;
+    padding: 0;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    border: 3px solid #00f2ff;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 0 50px rgba(0, 242, 255, 0.4); /* توهج أزرق خفيف */
+    border: 3px solid #00f2ff;
+    transition: box-shadow 0.5s ease;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    /* السماح بمرور اللمس لأزرار يوتيوب */
+    pointer-events: auto;
+}
+
+.close-btn {
+    position: absolute;
+    top: -50px; 
+    right: 0;
+    color: #00f2ff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000; /* أعلى قيمة ممكنة */
+}
+
+/* حاوية الأزرار وسط المودال */
+.video-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+/* التنسيق الأساسي للأزرار */
+.video-controls button {
+    background: rgba(255, 255, 255, 0.05); /* خلفية شفافة بحال الزجاج */
+    color: #00f2ff;
+    border: 2px solid #00f2ff;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+}
+
+/* تأثير عند تمرير الماوس (Hover) */
+.video-controls button:hover {
+    background: #00f2ff;
+    color: #000;
+    box-shadow: 0 0 25px #00f2ff, 0 0 50px rgba(0, 242, 255, 0.5);
+    transform: translateY(-3px); /* كيطير شوية للفوق */
+}
+
+/* تأثير عند الضغط (Active) */
+.video-controls button:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 15px #00f2ff;
+}
+
+/* إضافة لمسة سهم صغيرة بجانب النص */
+#prev-btn::before { content: '◄ '; margin-right: 5px; }
+#next-btn::after { content: ' ►'; margin-left: 5px; }
+
+/* إخفاء الأزرار مؤقتاً إيلا كان غير فيديو واحد (اختياري) */
+.video-controls button:disabled {
+    border-color: #555;
+    color: #555;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* تأثير الضوء اللي كيدوز وسط الزر */
+.video-controls button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.video-controls button:hover::after {
+    left: 100%;
+}
+
+.main-footer {
+    background: #000;
+    padding: 40px 20px;
+    margin-top: 60px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 242, 255, 0.2);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+    color: #888;
+}
+
+.main-footer p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+/* تمييز اسم الموقع باللون الأزرق */
+.main-footer p span {
+    color: #00f2ff;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+}
+
+/* تمييز أسماء الناشر والمطور */
+.main-footer strong {
+    color: #fff;
+    font-weight: 600;
+    border-bottom: 1px solid #ff4757; /* خط أحمر خفيف تحت الأسماء */
+}
+
+/* --- تعديل خاص للـ Inspector والمنظر المصغر --- */
+
+@media screen and (max-width: 768px) {
+    .modal-content {
+        width: 95% !important;
+        /* تأكد أن المربع ما فيهش padding كيغطي جوانب الفيديو */
+        padding: 0 !important; 
+        margin: 0 !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .video-container {
+        /* هاد السطر هو الساروت: كيخلي الفيديو هو اللي يستقبل النقرات */
+        pointer-events: auto; 
+        z-index: 1;
+    }
+
+    .video-container iframe {
+        /* تأكد أن الـ iframe واخد المساحة كاملة وما مغطيش */
+        width: 100%;
+        height: 100%;
+        border: none;
+        /* السماح بالتفاعل الكامل */
+        pointer-events: all !important; 
+    }
+
+    .close-btn {
+        /* بعد الزر على الفيديو باش ما يوقعش تداخل فـ "اللمس" الوهمي */
+        top: -50px;
+        right: 0;
+        z-index: 10001; /* أعلى من كلشي */
+    }
+}
+
+/* --- تنسيق خاص ببطاقة "قيد التطوير" (development) --- */
+
+/* 1. جعل الخط أحمر نيون لهذه البطاقة فقط */
+.anim.development .name h3 {
+    color: #ff4757; /* لون أحمر نيون */
+    text-shadow: 0 0 10px rgba(255, 71, 87, 0.6);
+}
+
+/* 2. إضافة تأثير التوهج النبضي (Pulsing Glow) للبطاقة لجذب الانتباه */
+.anim.development {
+    border-color: rgba(255, 71, 87, 0.4); /* حدود حمراء خفيفة */
+    animation: animFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards, /* أنيمايشن الدخول الأصلية */
+               pulseRed 2s infinite ease-in-out; /* أنيمايشن النبض الجديد */
+}
+
+/* 3. تعريف أنيمايشن النبض (Pulse) */
+@keyframes pulseRed {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 71, 87, 0.3), 0 0 20px rgba(255, 71, 87, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 71, 87, 0.6), 0 0 30px rgba(255, 71, 87, 0.4);
+        transform: scale(1.02); /* تكبير البطاقة قليلاً جداً في المنتصف */
+    }
+}
+
+/* 4. تغيير تأثير الـ Hover لهذه البطاقة ليكون متناسقاً مع اللون الأحمر */
+.anim.development:hover {
+    transform: translateY(-10px); 
+    border-color: #ff4757;
+    box-shadow: 0 10px 30px rgba(255, 71, 87, 0.5);
+}

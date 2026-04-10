@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniRecap Zone</title>
+    <link rel="stylesheet" href="stayel.css">
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1>AniRecap <span class="neon-text">Zone</span></h1>
+            <div class="flicker-line"></div>
+            <p>Prepare for the recap...</p>
+        </div>
+    </div>
+
+    <div class="head">
+        <h1>AniRecap Zone</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search Anime..." onkeyup="searchAnime()">
+            <span class="search-icon">🔍</span>
+        </div>
+    </div>
+    
+    <h2 id="anim">anime</h2>
+
+    <div class="container">
+        <div id="no-results" style="display:none; text-align:center;">
+            <h3>No Anime Found! 🔍</h3>
+            <p>Maybe it's hidden in the hidden leaf village? Try another name.</p>
+        </div>
+
+        <!--anim1-->
+        <div class="anim demon">
+            <div class="name"><h3>Demon Slayer</h3></div>
+            <div class="image">
+                <img src="image/Demon_Slayer.jpg" onclick="openVideo('vPUZw-gEcOU')" style="cursor:pointer;" />
+            </div>
+        </div>
+        <!--anim2-->
+        <div class="anim naruto">
+            <div class="name"><h3>Naruto part 1</h3></div>
+            <div class="image">
+                <img src="image/naruto.jpg" onclick="openVideo('f_wMs9nBd-s')" style="cursor:pointer;" />
+            </div>
+        </div>
+        <!--anim2-->
+        <div class="anim naruto">
+            <div class="name"><h3>Naruto part 2</h3></div>
+            <div class="image">
+                <img src="image/naruto.jpg" onclick="openVideo('S6g_2-3iVU4')" style="cursor:pointer;" />
+            </div>
+        </div>
+        <!--anim3-->
+        <div class="anim never">
+            <div class="name"><h3>Never Land</h3></div>
+            <div class="image">
+                <img src="image/never_land.jpg" onclick="openVideo('iQm033LeCoY')" style="cursor:pointer;" />
+            </div>
+        </div>
+        <!--anim4-->
+        <div class="anim hunter">
+            <div class="name"><h3>Hunter X Hunter</h3></div>
+            <div class="image">
+                <img src="image/hunter_X_hunter.jpg" onclick="openVideo('LgBgsc9p-2U')" style="cursor:pointer;" />
+            </div>
+        </div>
+        <!--anim5-->
+        <div class="anim jujutsu"> <div class="name"><h3>Jujutsu Kaisen</h3></div>
+            <div class="image">
+                <img src="image/جوجوتسو كايسن.png" onclick="openVideo('_I0f0FEUq5g')" style="cursor:pointer;" />
+            </div>
+        </div>
+        <!--anim6-->
+        <div class="anim dragon"> <div class="name"><h3>dragon ball</h3></div>
+            <div class="image">
+                <img src="image/gogo.png" onclick="openVideo('mjcLCdkm-jY')" style="cursor:pointer;" />
+            </div>
+        </div>
+        <div class="anim development"> 
+            <div class="name"><h3>Under development</h3></div>
+            <div class="image">
+                <img src="image/coming_soon.png" onclick="openVideo('')" style="cursor:pointer;" />
+            </div>
+        </div>
+    </div>
+
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeVideo()">&times;</span>
+            
+            <div class="video-container">
+                <iframe id="anime-video" src="" frameborder="0" allowfullscreen playsinline></iframe>
+            </div>
+
+            <div class="video-controls">
+                <button id="prev-btn" onclick="navVideo(-1)">Previous</button>
+                <button id="next-btn" onclick="navVideo(1)">Next ►</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let currentVideoIndex = 0;
+    const allVideos = [
+        'vPUZw-gEcOU', // Demon Slayer
+        'f_wMs9nBd-s', // Naruto 1
+        'S6g_2-3iVU4', // Naruto 2
+        'iQm033LeCoY', // Never Land
+        'LgBgsc9p-2U',  // Hunter X Hunter
+        '_I0f0FEUq5g', //jujutsu kaisen
+        'mjcLCdkm-jY', //dragon ball
+    ];
+
+    // --- 1. التحكم في الفيديو ---
+    function openVideo(videoID) {
+        const modal = document.getElementById('video-modal');
+        currentVideoIndex = allVideos.indexOf(videoID);
+        updateVideo();
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
+
+    function navVideo(step) {
+        currentVideoIndex += step;
+        if (currentVideoIndex >= allVideos.length) currentVideoIndex = 0;
+        if (currentVideoIndex < 0) currentVideoIndex = allVideos.length - 1;
+        updateVideo();
+    }
+
+    function updateVideo() {
+        const iframe = document.getElementById('anime-video');
+        iframe.src = `https://www.youtube.com/embed/${allVideos[currentVideoIndex]}?autoplay=1&rel=0&fs=1&playsinline=1&modestbranding=1`;
+    }
+
+    function closeVideo() {
+        const modal = document.getElementById('video-modal');
+        const iframe = document.getElementById('anime-video');
+        iframe.src = "";
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('video-modal');
+        if (event.target == modal) { closeVideo(); }
+    }
+
+    // --- 2. نظام البحث ---
+    function searchAnime() {
+        let input = document.getElementById('searchInput').value.toLowerCase().trim();
+        let cards = document.getElementsByClassName('anim');
+        let noResults = document.getElementById('no-results');
+        let found = false;
+
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].querySelector('.name h3').innerText.toLowerCase();
+            
+            if (title.includes(input)) {
+                cards[i].classList.remove('hidden');
+                found = true; // لقينا على الأقل أنمي واحد مطابق
+            } else {
+                cards[i].classList.add('hidden');
+            }
+        }
+
+        // إظهار أو إخفاء رسالة "لم يتم العثور على نتائج"
+        if (found) {
+            noResults.style.display = "none";
+        } else {
+            noResults.style.display = "block";
+        }
+    }
+
+    // --- 3. السحر: شاشة التحميل + أنميشن البطاقات ---
+    window.onload = function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        const cards = document.querySelectorAll('.anim');
+        
+        // 1. كنتسناو 1.5 ثانية (باش يبان اللوغو نيون)
+        setTimeout(() => {
+            loadingScreen.classList.add('fade-out');
+            
+            // 2. كنتسناو شاشة التحميل تغبر تماماً (0.5 ثانية)
+            setTimeout(() => {
+                // 3. عاد كنبداو "نطلقوا" البطاقات واحدة تلو الأخرى
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('show');
+                    }, index * 150); 
+                });
+            }, 500); 
+
+        }, 1500); 
+    };
+    </script>
+
+    <footer class="main-footer">
+    <div class="footer-content">
+        <p>&copy; 2026 <span>AniRecap Zone</span>. All rights reserved.</p>
+        <p>Publisher: <strong>Mohamed</strong> | Developer: <strong>Wassim</strong></p>
+    </div>
+</footer>
+</body>
+</html>
